@@ -88,16 +88,16 @@ function searchapi_fetch_products_and_index()
             "image" => wp_get_attachment_url($product->get_image_id()),
             "tags" => implode(",", wp_get_post_terms($product->get_id(), 'product_tag', array('fields' => 'names'))),
             "price" => $product->get_price(),
-            "category" => trim(explode(',', $product->get_categories( ',', ' ' . _n( ' ', '  ', $cat_count, 'woocommerce' ) . ' ', ' ' ))[0]),
+            "category" => trim(explode(',', $product->get_categories( ',', ' ' . _n( ' ', '  ', $cat_count, 'woocommerce' ) . ' ', ' ' ))[0])
         ];
 
         $response = api_add_page($product);
 
         if ($response["code"] == "ok") {
-            $index_log[] = "[OK] Produkt <b>{$product['title']}</b> o adresie {$product['path']} został zaindeksowany.";
+            $index_log[] = "[OK] Product <b>{$product['title']}</b> at the address {$product['path']} has been indexed.";
             $products_indexed_counter++;
         } else {
-            $index_log[] = "[ERR] Podczas indeksowania produkt {$product['title']} wystąpiły błędy.";
+            $index_log[] = "[ERR] During the indexing of product {$product['title']} errors occurred.";
         }
     }
 
@@ -118,9 +118,9 @@ function searchapi_confirm_index_products_action()
     $index_updated_at = get_option("searchapi_index_products_action_updated_at");
 
     if ($index_updated_at) {
-        $msg = "Ostatnia aktualizacja indeksu produktów miała miejsce {$index_updated_at}.";
+        $msg = "The last product index update took place {$index_updated_at}.";
     } else {
-        $msg = "Indeks wyszukiwarki jeszcze nigdy nie został uzupełniony";
+        $msg = "The search engine index has never been updated before.";
     }
 
     echo '
@@ -128,17 +128,17 @@ function searchapi_confirm_index_products_action()
         <h1 class="wp-heading-inline">Wyszukiwarka produktów Searchapi.pl</h1>
         <hr class="wp-header-end">
         <div class="notice notice-info">
-            <p><strong>Indeksuj produkty z katalogu</strong></p>
-            <p>Aby Twoje produkty pojawiły się w wynikach wyszukiwania, musisz je zindeksować. Jeśli masz dużo produktów, może to trochę potrwać. Po zindeksowaniu produkty powinny pojawić się w ciągu kilku godzin, ale zazwyczaj jest to szybsze.' . $msg . '.</p>
+            <p><strong>Index products from the catalog</strong></p>
+            <p>In order for your products to appear in search results, you must index them. If you have a lot of products, this may take some time. After indexing, the products should appear within a few hours, but usually it is faster.' . $msg . '.</p>
             <p class="submit" style="margin-top:0px; padding-top:0px;">
                 <form action="/wp-admin/admin.php?page=searchapi&action=do_index" method="POST">
-                    <button type="submit" class="button-primary">Aktualizuj produkty</button>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="/wp-admin/admin.php?page=searchapi&action=flush_index" class="button-secondary">Zregeneruj indeks</a>
+                    <button type="submit" class="button-primary">Update products</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="/wp-admin/admin.php?page=searchapi&action=flush_index" class="button-secondary">Regenerate index</a>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="/wp-admin/admin.php?page=searchapi&action=create_account" class="button-secondary">Klucze API</a>
+                    <a href="/wp-admin/admin.php?page=searchapi&action=create_account" class="button-secondary">API keys</a>
                 </form>
             </p>
-            <p>Jeśli dodałeś nowe produkty lub zaktualizowałeś już istniejące, użyj opcji "Aktualizuj produkty". Jeśli natomiast usunąłeś jakieś produkty z oferty, skorzystaj z opcji "Zregeneruj indeks". Różnica między tymi dwoma opcjami polega na tym, że pierwsza pozwala na aktualizację indeksu bez jego usuwania, dzięki czemu produkty są nadal dostępne dla wyszukiwarki. Natomiast druga opcja polega na całkowitym usunięciu i ponownym utworzeniu indeksu, w wyniku czego produkty będą dostępne dopiero po przeindeksowaniu systemowym przez Searchapi.pl, które odbywa się co kilka godzin.</p>
+            <p>If you have added new products or updated existing ones, use the "Update Products" option. If, on the other hand, you have removed some products from your offer, use the "Regenerate Index" option. The difference between these two options is that the first one allows for updating the index without removing it, so that the products are still available for the search engine. The second option involves completely removing and recreating the index, as a result, the products will only be available after re-indexing by Searchapi.pl, which occurs every few hours.</p>
         </div>
     </div>
     ';
@@ -156,7 +156,7 @@ function searchapi_flush_products_action()
     if ($response["code"] == "ok") {
         header("Location: /wp-admin/admin.php?page=searchapi&action=do_index");
     } else {
-        $label = "Wystapiły błędy";
+        $label = "Errors occurred";
         $noticeBox = "<div class='notice notice-error'>
             <p>{$response["message"]}</p>
         </div>";
@@ -166,7 +166,7 @@ function searchapi_flush_products_action()
             <hr class='wp-header-end'>
             {$noticeBox}
 			<p class='submit'>
-				<a href='/wp-admin/admin.php?page=searchapi' class='button-primary'>Powrót</a>
+				<a href='/wp-admin/admin.php?page=searchapi' class='button-primary'>Back</a>
 			</p>
         </div>
     ";
@@ -189,15 +189,15 @@ function searchapi_index_products_action()
 
     echo "
     <div class='wrap'>
-        <h1 class='wp-heading-inline'>Produkty ({$counter}) zostały zaindeksowane</h1>
+        <h1 class='wp-heading-inline'>Products ({$counter}) have been indexed.</h1>
         <hr class='wp-header-end'>
         <div class='notice notice-info'>
-            <p>Twoje produkty pojawią się w wyszukiwarce za kilka godzin. Jeśli chcesz, aby proces ten przebiegł szybciej, możesz napisać do nas na adres andrzej@itma.pl lub zadzwonić pod numer 530 861 858. Chętnie Ci pomożemy.</p>
+            <p>Your products will appear in the search engine in a few hours. If you would like the process to be faster, you can write to us at andrzej@itma.pl or call +48 530 861 858. We will be happy to help you.</p>
             <div style='width:100%; height:200px; overflow-y: scroll; margin-top:30px;'>
                 {$index_log}
             </div>
             <p class='submit'>
-                <a href='/wp-admin/admin.php?page=searchapi' class='button-primary'>Powrót</a>
+                <a href='/wp-admin/admin.php?page=searchapi' class='button-primary'>Back</a>
             </p>
         </div>
     </div>
@@ -214,10 +214,10 @@ function searchapi_new_account_action()
 {
     echo '
         <div class="wrap">
-            <h1 class="wp-heading-inline">Wyszukiwarka produktów Searchapi.pl</h1>
+            <h1 class="wp-heading-inline">QuickSearchAPI.com Product Search Engine.</h1>
             <hr class="wp-header-end">
             <div class="notice notice-info">
-                <p><strong>Dokończ instalację</strong></p>
+                <p><strong>Complete the installation.</strong></p>
                 <p>Aby umożliwić swoim klientom korzystanie z auto podpowiedzi w wyszukiwarce należy zaindeksować ofertę sklepu. Indeksacja będzie możliwa po dokończeniu instalacji. Po kliknięciu w przycisk "Dokończ instalację" zostanie utworzone konto sklepu w usłudze searchapi.pl, w którym będzie przetwarzana oferta sklepu tak aby Twoi klienci mogli z łatwością odnaleźć produkty w wyszukiwarce. Konto jest darmowe.</p>
                 <p class="submit">
                     <form action="/wp-admin/admin.php?page=searchapi&action=create_account" method="POST">
