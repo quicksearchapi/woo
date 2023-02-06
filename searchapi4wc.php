@@ -53,7 +53,7 @@ function search_input()
               s = d.createElement("script");
               s.type = "text/javascript";
               s.async = true;
-              s.src = "https://quicksearchapi.com/searchapi.js";
+              s.src = "https://quicksearchapi.com/searchapi.min.js";
               b.appendChild(s);
               l.setAttribute("rel", "stylesheet");
               l.setAttribute("href", "https://quicksearchapi.com/searchapi.min.css");
