@@ -65,7 +65,7 @@ function search_input()
 }
 
 /**
- * Fetches and indexes given products into Searchapi.pl engine
+ * Fetches and indexes given products into QuickSearchAPI.com engine
  *
  * @return array
  */
@@ -125,7 +125,7 @@ function searchapi_confirm_index_products_action()
 
     echo '
     <div class="wrap">
-        <h1 class="wp-heading-inline">Wyszukiwarka produktów Searchapi.pl</h1>
+        <h1 class="wp-heading-inline">E-commerce search tool QuickSearchAPI.com</h1>
         <hr class="wp-header-end">
         <div class="notice notice-info">
             <p><strong>Index products from the catalog</strong></p>
@@ -138,7 +138,7 @@ function searchapi_confirm_index_products_action()
                     <a href="/wp-admin/admin.php?page=searchapi&action=create_account" class="button-secondary">API keys</a>
                 </form>
             </p>
-            <p>If you have added new products or updated existing ones, use the "Update Products" option. If, on the other hand, you have removed some products from your offer, use the "Regenerate Index" option. The difference between these two options is that the first one allows for updating the index without removing it, so that the products are still available for the search engine. The second option involves completely removing and recreating the index, as a result, the products will only be available after re-indexing by Searchapi.pl, which occurs every few hours.</p>
+            <p>If you have added new products or updated existing ones, use the "Update Products" option. If, on the other hand, you have removed some products from your offer, use the "Regenerate Index" option. The difference between these two options is that the first one allows for updating the index without removing it, so that the products are still available for the search engine. The second option involves completely removing and recreating the index, as a result, the products will only be available after re-indexing by QuickSearchAPI.com, which occurs every few hours.</p>
         </div>
     </div>
     ';
@@ -192,7 +192,7 @@ function searchapi_index_products_action()
         <h1 class='wp-heading-inline'>Products ({$counter}) have been indexed.</h1>
         <hr class='wp-header-end'>
         <div class='notice notice-info'>
-            <p>Your products will appear in the search engine in a few hours. If you would like the process to be faster, you can write to us at andrzej@itma.pl or call +48 530 861 858. We will be happy to help you.</p>
+            <p>Your products will appear in the search engine in a few hours. If you would like the process to be faster, you can write to us at andrzej@itma.pl, call +48 530 861 858 or use chat online. We will be happy to help you.</p>
             <div style='width:100%; height:200px; overflow-y: scroll; margin-top:30px;'>
                 {$index_log}
             </div>
@@ -218,7 +218,7 @@ function searchapi_new_account_action()
             <hr class="wp-header-end">
             <div class="notice notice-info">
                 <p><strong>Complete the installation.</strong></p>
-                <p>Aby umożliwić swoim klientom korzystanie z auto podpowiedzi w wyszukiwarce należy zaindeksować ofertę sklepu. Indeksacja będzie możliwa po dokończeniu instalacji. Po kliknięciu w przycisk "Dokończ instalację" zostanie utworzone konto sklepu w usłudze searchapi.pl, w którym będzie przetwarzana oferta sklepu tak aby Twoi klienci mogli z łatwością odnaleźć produkty w wyszukiwarce. Konto jest darmowe.</p>
+                <p>To allow your customers to use the auto-suggest feature in the search, you need to index your store\'s offerings. The indexing will be possible after the installation is completed. By clicking the `Finish Installation` button, a store account will be created in the QuickSearchAPI.com service, where the store\'s offerings will be processed so that your customers can easily find products in the search. The account is free.</p>
                 <p class="submit">
                     <form action="/wp-admin/admin.php?page=searchapi&action=create_account" method="POST">
                     <input type="text" name="searchapi_account_email" placeholder="Adres e-mail administratora" />
@@ -247,13 +247,13 @@ function searchapi_delete_account_action()
         update_option("searchapi_website_uuid", false);
         update_option("searchapi_website_secret_key", false);
 
-        $label = "Konto zostało usunięte";
+        $label = "Account has been deleted.";
         $noticeBox = "<div class='notice notice-success'>
-            <p>Konto wraz ze wszystkimi danymi zostało usunięte z usługi Searchapi.pl. Możesz ponownie założyć konto na dowolny adres e-mail i ponownie użyć nowego konta w tym sklepie.</p>
+            <p>Your account and all its data have been deleted from the QuickSearchAPI.com service. You can set up a new account with any email address and start using it again in this store.</p>
         </div>";
 
     } else {
-        $label = "Wystapiły błędy";
+        $label = "Errors occurred.";
         $noticeBox = "<div class='notice notice-error'>
             <p>{$response["message"]}</p>
         </div>";
@@ -283,7 +283,7 @@ function searchapi_create_account_action()
         if (filter_var($_POST["searchapi_account_email"], FILTER_VALIDATE_EMAIL)) {
             $response = api_create_account($_POST);
             if ($response["code"] == "ok") {
-                $label = "Nowe konto zostało utworzone";
+                $label = "A new account has been created.";
 
                 update_option("searchapi_account_uuid", $response["data"]["X-Auth-Key"]);
                 update_option("searchapi_account_secret_key", $response["data"]["X-Auth-Secret"]);
@@ -294,19 +294,19 @@ function searchapi_create_account_action()
                     update_option("searchapi_website_uuid", $response["data"]["X-Auth-Key"]);
                     update_option("searchapi_website_secret_key", $response["data"]["X-Auth-Secret"]);
 
-                    $label = "Nowa strona została utworzona";
+                    $label = "A new website has been created";
                     $noticeBox = "<div class='notice notice-success'>
-                        <p>Nowe konto zostało pomyślnie utworzone. Poniższe dane będą Ci potrzebne jedynie w przypadku kiedy będziesz chciał dokonywać zaawansowanych zmian w komunikacji plugina z usługą Searchapi.pl. Jeśli nie zamierzasz takich zmian dokonywac nie musisz zapisywać tych danych.</p>
+                        <p>Your new account has been successfully created. You will only need the following information if you want to make advanced changes to the plugin's communication with the QuickSearchAPI.com service. If you do not plan to make these changes, there is no need to save this information.</p>
                     </div>";
 
                 } else {
-                    $label = "Wystapiły błędy";
+                    $label = "Errors occurred.";
                     $noticeBox = "<div class='notice notice-error'>
                         <p>{$response["message"]}</p>
                     </div>";
                 }
             } else {
-                $label = "Wystapiły błędy";
+                $label = "Errors occurred.";
                 $noticeBox = "<div class='notice notice-error'>
                     <p>{$response["message"]}</p>
                 </div>";
@@ -315,7 +315,7 @@ function searchapi_create_account_action()
             header("Location: /wp-admin/admin.php?page=searchapi&err=1");
         }
     } else {
-        $label = "Dane konta";
+        $label = "Account details";
     }
 
     $account_uuid = get_option("searchapi_account_uuid");
@@ -330,33 +330,33 @@ function searchapi_create_account_action()
             {$noticeBox}
 
 			<div class='notice notice-info'>
-			    <h3>Klucze API konta w Searchapi.pl</h3>
-                <p>Jeśli chcesz samodzielnie dodać nowy sklep pod jednym kontem, możesz użyć kluczy API sklepu. To bardziej zaawansowana metoda i jest skierowana do bardziej doświadczonych użytkowników. Więcej informacji znajdziesz <a href='https://searchapi.pl' target='_blank'>w dokumentacji</a>.</p>
+			    <h3>Account`s API keys at QuickSearchAPI.com</h3>
+                <p>If you want to add a new store under one account on your own, you can use the store's API keys. This is a more advanced method and is intended for more experienced users. You can find more information <a href='https://quicksearchapi.com' target='_blank'>in the documentation</a>.</p>
 			    <p>
-                    <strong>Identyfikator konta:</strong>
+                    <strong>Account ID:</strong>
                     {$account_uuid}
                 </p>
 			    <p>
-                    <strong>Sekretny klucz:</strong>
+                    <strong>Secret Key:</strong>
                     {$account_secret}
                 </p>
 			</div>
 
 			<div class='notice notice-info'>
-			    <h3>Klucze API sklepu</h3>
-                <p>Jeśli chcesz samodzielnie aktualizować ofertę swojego sklepu, możesz użyć kluczy API. To bardziej zaawansowana metoda i jest skierowana do bardziej doświadczonych użytkowników. Więcej informacji znajdziesz <a href='https://searchapi.pl' target='_blank'>w dokumentacji</a>.</p>
+			    <h3>Shop`s API keys at QuickSearchAPI.com</h3>
+                <p>If you want to update your store's offerings independently, you can use API keys. This is a more advanced method and is aimed at more experienced users. You can find more information <a href='https://quicksearchapi.com' target='_blank'>in the documentation</a>.</p>
 			    <p>
-                    <strong>Identyfikator konta:</strong>
+                    <strong>Shop ID:</strong>
                     {$website_uuid}
                 </p>
 			    <p>
-                    <strong>Sekretny klucz:</strong>
+                    <strong>Secret Key:</strong>
                     {$website_secret}
                 </p>
 			</div>
 			<p class='submit'>
-				<a href='/wp-admin/admin.php?page=searchapi' class='button-primary'>Powrót</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <a href='/wp-admin/admin.php?page=searchapi&action=delete_account' class='button-secondary' onclick='return confirm(\"Usuwając swoje konto w Searchapi.pl, usuniesz wszystkie swoje produkty z indeksu, co sprawi, że nie będzie możliwe ich wyszukiwanie. Ta operacja jest ostateczna i nieodwracalna. Czy na pewno chcesz kontynuować?\");'>Usuń konto</a>
+				<a href='/wp-admin/admin.php?page=searchapi' class='button-primary'>Back</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href='/wp-admin/admin.php?page=searchapi&action=delete_account' class='button-secondary' onclick='return confirm(\"By deleting your account on QuickSearchAPI.com, you will remove all your products from the index, making it impossible to search for them. This operation is final and cannot be undone. Are you sure you want to continue?\");'>Remove this account</a>
 			</p>
         </div>
     ";
@@ -370,7 +370,7 @@ function searchapi_create_account_action()
  */
 function api_delete_account()
 {
-    $ch = curl_init("https://searchapi.pl/api/account/delete");
+    $ch = curl_init("https://quicksearchapi.com/api/account/delete");
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         "Content-Type: application/json",
         "X-Auth-Key: " . get_option("searchapi_account_uuid"),
@@ -391,7 +391,7 @@ function api_delete_account()
  */
 function api_create_account($input)
 {
-    $ch = curl_init("https://searchapi.pl/api/account/create");
+    $ch = curl_init("https://quicksearchapi.com/api/account/create");
     $payload = json_encode([
         "email" => $input["searchapi_account_email"],
     ]);
@@ -414,7 +414,7 @@ function api_create_account($input)
  */
 function api_create_website($input)
 {
-    $ch = curl_init("https://searchapi.pl/api/website/create");
+    $ch = curl_init("https://quicksearchapi.com/api/website/create");
     $payload = json_encode([
         "host" => $_SERVER['SERVER_NAME'],
     ]);
@@ -438,7 +438,7 @@ function api_create_website($input)
  */
 function api_add_page(array $data)
 {
-    $ch = curl_init("https://searchapi.pl/api/page/add");
+    $ch = curl_init("https://quicksearchapi.com/api/page/add");
 
     $payload = json_encode($data);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
@@ -461,7 +461,7 @@ function api_add_page(array $data)
  */
 function api_website_flush()
 {
-    $ch = curl_init("https://searchapi.pl/api/website/flush");
+    $ch = curl_init("https://quicksearchapi.com/api/website/flush");
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         "Content-Type: application/json",
         "X-Auth-Key: " . get_option("searchapi_website_uuid"),
@@ -512,8 +512,8 @@ function searchapi_plugin_setup_menu()
 {
     global $function;
     add_menu_page(
-        "Wyszukiwarka produktów",
-        "Searchapi.pl",
+        "Search engine",
+        "QuickSearch",
         "manage_options",
         "searchapi",
         $function
